@@ -8,5 +8,6 @@
     <string name="notification_text">Text of this Notification</string>
     <string name="notification_title">Test Notification</string>
     <string name="notification_action_title">Test Actions Notification</string>
+    <string name="send_mail">Send mail</string>
 
 </resources>

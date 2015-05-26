@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -48,6 +50,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         Log.d(TAG, "onConnected: " + connectionHint);
                         // Now you can use the Data Layer API
                     }
+
                     @Override
                     public void onConnectionSuspended(int cause) {
                         Log.d(TAG, "onConnectionSuspended: " + cause);
@@ -123,14 +126,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 PendingIntent.getActivity(this, 0, viewIntent, 0);
 
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(getString(R.string.notification_title))
-                        .setContentText(getString(R.string.notification_text))
+                getDefaultBuilder(getString(R.string.notification_title), getString(R.string.notification_text))
                         .setContentIntent(viewPendingIntent);
 
         return notificationBuilder.build();
 
+    }
+
+    private NotificationCompat.Builder getDefaultBuilder(String title, String text) {
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(text);
     }
 
     private Notification getNotificationWithAction() {
@@ -140,13 +147,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
         PendingIntent mapPendingIntent =
                 PendingIntent.getActivity(this, 0, mapIntent, 0);
 
+        Intent mailIntent = new Intent(Intent.ACTION_VIEW);
+        Uri mailUri = Uri.parse("mailto:smb.roman@gmail.com");
+        mailIntent.setData(mailUri);
+        mapIntent.setData(geoUri);
+        PendingIntent mailPendingIntent =
+                PendingIntent.getActivity(this, 0, mailIntent, 0);
+
+        NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_email, getString(R.string.send_mail), mailPendingIntent).build();
+
+        Bitmap aBigBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.roman);
+
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(getString(R.string.notification_action_title))
-                        .setContentText(getString(R.string.notification_text))
+                getDefaultBuilder(getString(R.string.notification_action_title), getString(R.string.notification_text))
                         .addAction(android.R.drawable.ic_dialog_map,
-                                getString(R.string.ahow_map), mapPendingIntent);
+                                getString(R.string.ahow_map), mapPendingIntent)
+                        .extend(new NotificationCompat.WearableExtender().addAction(action))
+                        .setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigPicture(aBigBitmap));
 
         return notificationBuilder.build();
     }
@@ -155,10 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Create builder for the main notification
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Page 1")
-                        .setContentText("Short message");
+                getDefaultBuilder("Page 1", "Short text");
 
         // Create a big text style for the second page
         NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
