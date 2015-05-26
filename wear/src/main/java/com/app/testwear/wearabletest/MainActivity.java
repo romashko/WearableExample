@@ -2,8 +2,9 @@ package com.app.testwear.wearabletest;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -14,12 +15,13 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
-public class MainActivity extends Activity implements DataApi.DataListener {
+public class MainActivity extends Activity implements DataApi.DataListener, View.OnClickListener {
 
     private final static String TAG = MainActivity.class.getSimpleName();
     private final static String COUNT_KEY = "COUNT";
 
     private TextView mTextView;
+    private Button mapButton;
 
     private GoogleApiClient googleApiClient;
 
@@ -27,13 +29,11 @@ public class MainActivity extends Activity implements DataApi.DataListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-            @Override
-            public void onLayoutInflated(WatchViewStub stub) {
-                mTextView = (TextView) stub.findViewById(R.id.text);
-            }
-        });
+
+        mTextView = (TextView) findViewById(R.id.text);
+        mapButton = (Button) findViewById(R.id.show_map);
+
+        mapButton.setOnClickListener(this);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
@@ -95,6 +95,13 @@ public class MainActivity extends Activity implements DataApi.DataListener {
                     });
                 }
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.show_map:
         }
     }
 }
