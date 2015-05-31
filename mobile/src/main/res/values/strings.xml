@@ -10,4 +10,12 @@
     <string name="notification_action_title">Test Actions Notification</string>
     <string name="send_mail">Send mail</string>
 
+    <string name="reply_label">Reply</string>
+
+    <string-array name="reply_choices">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Maybe</item>
+    </string-array>
+
 </resources>

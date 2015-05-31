@@ -24,11 +24,22 @@
         android:layout_height="wrap_content"
         android:text="Notification with page"/>
 
+    <Button
+        android:id="@+id/notification_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification with voice"/>
+
 
     <Button
         android:id="@+id/send_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send Data"/>
+
+    <TextView
+        android:id="@+id/notification_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
