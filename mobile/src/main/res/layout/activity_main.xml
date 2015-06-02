@@ -1,45 +1,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/notification_button"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Notification"/>
+        android:text="@string/notification" />
+
+    <Button
+        android:id="@+id/notification_big_button"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:text="@string/notification_big" />
 
     <Button
         android:id="@+id/notification_action_button"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Notification with action"/>
+        android:text="@string/notification_action" />
 
     <Button
         android:id="@+id/notification_page_button"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Notification with page"/>
+        android:text="@string/notification_page" />
 
     <Button
         android:id="@+id/notification_voice"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Notification with voice"/>
+        android:text="@string/notification_voice" />
 
 
     <Button
         android:id="@+id/send_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Data"/>
+        android:text="@string/send_data"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/notification_result"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
 
 </LinearLayout>

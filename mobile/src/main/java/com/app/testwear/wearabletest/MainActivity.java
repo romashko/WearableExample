@@ -30,12 +30,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private final static String TAG = MainActivity.class.getSimpleName();
     private final static String COUNT_KEY = "COUNT";
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
+    public static final int NOTIFICATION_ID = 1;
+    public static final String GEO_LINK = "geo:0,0?q=London";
+    public static final String MAIL_LINK = "mailto:smb.roman@gmail.com";
 
     private GoogleApiClient googleApiClient;
 
     private int count;
 
-    private TextView notificationRsult;
+    private TextView notificationResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +48,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         setContentView(R.layout.activity_main);
         findViewById(R.id.notification_button).setOnClickListener(this);
+        findViewById(R.id.notification_big_button).setOnClickListener(this);
         findViewById(R.id.notification_action_button).setOnClickListener(this);
         findViewById(R.id.notification_page_button).setOnClickListener(this);
         findViewById(R.id.notification_voice).setOnClickListener(this);
         findViewById(R.id.send_data).setOnClickListener(this);
-        notificationRsult = (TextView) findViewById(R.id.notification_result);
+        notificationResult = (TextView) findViewById(R.id.notification_result);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
@@ -78,7 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        notificationRsult.setText(getMessageText(intent));
+        notificationResult.setText(getMessageText(intent));
     }
 
     @Override
@@ -99,6 +103,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.notification_button:
                 notification = getSimpleNotification();
+                showNotification(notification);
+                break;
+            case R.id.notification_big_button:
+                notification = getBigStyleNotification();
                 showNotification(notification);
                 break;
             case R.id.notification_action_button:
@@ -132,7 +140,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void showNotification(Notification notification) {
-        int notificationId = 001;
+        int notificationId = NOTIFICATION_ID;
 
         // Get an instance of the NotificationManager service
         NotificationManagerCompat notificationManager =
@@ -165,13 +173,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private Notification getNotificationWithAction() {
         Intent mapIntent = new Intent(Intent.ACTION_VIEW);
-        Uri geoUri = Uri.parse("geo:0,0?q=London");
+        Uri geoUri = Uri.parse(GEO_LINK);
         mapIntent.setData(geoUri);
         PendingIntent mapPendingIntent =
                 PendingIntent.getActivity(this, 0, mapIntent, 0);
 
         Intent mailIntent = new Intent(Intent.ACTION_VIEW);
-        Uri mailUri = Uri.parse("mailto:smb.roman@gmail.com");
+        Uri mailUri = Uri.parse(MAIL_LINK);
         mailIntent.setData(mailUri);
         mapIntent.setData(geoUri);
         PendingIntent mailPendingIntent =
@@ -179,7 +187,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_email, getString(R.string.send_mail), mailPendingIntent).build();
 
-        Bitmap aBigBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_cast_light);
+        Bitmap aBigBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.me);
 
         NotificationCompat.Builder notificationBuilder =
                 getDefaultBuilder(getString(R.string.notification_action_title), getString(R.string.notification_text))
@@ -187,23 +195,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 getString(R.string.ahow_map), mapPendingIntent)
                         .extend(new NotificationCompat.WearableExtender()
                                 .addAction(action)
-                                .setGravity(Gravity.BOTTOM))
+                                .setGravity(Gravity.BOTTOM)
+                                .setHintHideIcon(true))
                         .setStyle(new NotificationCompat.BigPictureStyle()
                                 .bigPicture(aBigBitmap));
 
         return notificationBuilder.build();
     }
 
+    private Notification getBigStyleNotification() {
+
+        // Create builder for the main notification
+        NotificationCompat.Builder notificationBuilder =
+                getDefaultBuilder(getString(R.string.notification_title), getString(R.string.notification_text));
+
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(getString(R.string.notification_title))
+                .bigText(getString(R.string.a_lot_of_text));
+
+        notificationBuilder.setStyle(bigTextStyle)
+                        .build();
+
+        return notificationBuilder.build();
+
+    }
+
+
     private Notification getNotificationWithPage() {
 
         // Create builder for the main notification
         NotificationCompat.Builder notificationBuilder =
-                getDefaultBuilder("Page 1", "Short text");
+                getDefaultBuilder(getString(R.string.notification_title_page_1), getString(R.string.notification_text));
 
         // Create a big text style for the second page
         NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
-        secondPageStyle.setBigContentTitle("Page 2")
-                .bigText("A lot of text...");
+        secondPageStyle.setBigContentTitle(getString(R.string.notification_title_page2))
+                .bigText(getString(R.string.a_lot_of_text));
 
         // Create second page notification
         Notification secondPageNotification =
@@ -241,8 +268,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         .build();
 
 // Build the notification and add the action via WearableExtender
-        return getDefaultBuilder("Notification with relu", "This is notification with reply")
-                        .extend(new NotificationCompat.WearableExtender().addAction(action))
+        return getDefaultBuilder(getString(R.string.notification_reply_title), getString(R.string.notification_reply_text))
+                        .extend(new NotificationCompat.WearableExtender()
+                                .addAction(action))
                         .build();
     }
 
